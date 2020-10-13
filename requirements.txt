@@ -1,0 +1,11 @@
+Что нужно разобрать и настроить для начала:
+1)Webpack (imports/exports)
+ - Babel (переводчик js с нового в любые более старые версии языка)
+ - Scss (предпроцессор для css)
+ - Eslint (чистота написанного кода)
+
+ Разработка бужет вестись в 2х режимах: Dev и Prod:
+ Dev: Server, SourceMaps, Eslint, Not minified, JS & css
+ Prod: Minified code
+
+2)git
