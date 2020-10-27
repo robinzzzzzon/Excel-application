@@ -14,6 +14,4 @@ git init
 git add .
 git commit -m "текст коммита"
 git push - u origin название ветки
-git checkout -b "название ветки"
-
-Продолжить с 5го урока
+git checkout -b "название ветки" //Создаем новую ветку

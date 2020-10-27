@@ -41,11 +41,12 @@
     "mini-css-extract-plugin": "^1.0.0",
     "sass": "^1.27.0",
     "sass-loader": "^10.0.3",
-    "webpack": "^5.1.0",
+    "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.11.5"
+    "@babel/polyfill": "^7.11.5",
+    "normalize.css": "^8.0.1"
   }
 }
