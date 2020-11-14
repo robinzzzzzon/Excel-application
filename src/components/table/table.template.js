@@ -10,14 +10,26 @@ function toCell(content) {
 }
 
 //функция создания колонки, которая принимает некий элемент, в нашем случае char
+//div с col-resize специально добавлен для дальнейшего оживления под ресайз колонок
 function toColumn(content) {
-    return `<div class="column">${content}</div>`
+    return `<div class="column">
+    ${content}
+    <div class="col-resize"></div>
+    </div>`
 }
 
 //функция создания строки, которая в качестве контента принимает массив колонок
 function createRow(info, data) {
+
+    //пример переменной для выборочного добавления какого либо элемента.
+    //т.к. info не всегда определен, то и div row-resize нужен не всегда
+    const resize = info ? `<div class="row-resize"></div>` : ''
+
     return  `<div class="row">
-        <div class="row-info">${info ? info : ''}</div>
+        <div class="row-info">
+        ${info ? info : ''}
+        ${resize}
+        </div>
         <div class="row-data">${data}</div>
             </div>`
 }

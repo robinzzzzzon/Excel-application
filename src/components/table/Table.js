@@ -6,8 +6,14 @@ export class Table extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
   static className = 'excel__table'
 
+  constructor ($root) {
+    super($root, {
+      //listeners: ['click', 'mousedown', 'mousemove', 'mouseup']
+    })
+  }
+
   //Переопределяем метод
   toHTML() {
     return createTable(30)
-  } 
+  }
 }
