@@ -1,32 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,400&display=swap'); //подключаем гугловские шрифты
-@import "~normalize.css"; //подключаем библиотечку для нормализации нашей верстки во всех браузерах.
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import "~normalize.css";
 
-//Получаем доступ до всех основных блоков страницы Excel, стили для которых мы вынесли в отдельные файлы:
 @import "header";
 @import "toolbar";
 @import "formula";
 @import "table";
 @import "dashboard";
 
-
-
-* { //обнуляем для всех селекторов паддинги и маржины и выставляем border-box:
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {  //для тега body подключаем наши гугл-шрифты. 
-        //Если же по какой-то причине их не будет, то подключаем шрифты семейства sans-serif.
-    font-family: 'Roboto', sans-serif;
-    font-size: 12px;
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
 }
-
 
 .excel {
-    position: relative;
-    color: #888;
-    height: 100%;
-    max-width: 100%;
-    font-size: .8rem;
+  position: relative;
+  color: #888;
+  height: 100%;
+  max-width: 100%;
+  font-size: .8rem;
 }
+
+
