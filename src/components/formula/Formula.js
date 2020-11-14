@@ -33,5 +33,4 @@ export class Formula extends ExcelComponent {
   onClick(event) {
     console.log('Formula: onClick', event)
   }
-
 }

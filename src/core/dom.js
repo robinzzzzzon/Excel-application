@@ -29,8 +29,13 @@ class Dom {
   }
 
   //метод обертка добавления слушателя
-  on(eventType, callback) {
-    this.$el.addEventListener(eventType, callback)
+  on(eventType, callbackFn) {
+    this.$el.addEventListener(eventType, callbackFn)
+  }
+
+  //метод обертка удаления слушателя
+  off(evenType, callbackFn) {
+    this.$el.removeEventListener(evenType, callbackFn)
   }
 
 
@@ -54,13 +59,14 @@ class Dom {
 }
 
 //функция создания инстанса класса.
-//здесь мы на вход функции подаем некий селектор, который может быть либо строкой, либо готовой нодой.
+//здесь мы на вход функции подаем селектор, который может быть либо строкой, либо готовой нодой.
 //ну и соотв-нно возвращаем инстанс нашего класса
 export function $(selector) {
   return new Dom(selector)
 }
 
-//переменная с анонимной функцией. Здесь мы создаем элемент по тагнейму, если указаны классы, то добавляем их и возвращаем элемент
+//переменная с анонимной функцией. 
+//Здесь мы создаем элемент по тагнейму, если указаны классы, то добавляем их и возвращаем элемент
 $.create = (tagName, classes = '') => {
   const el = document.createElement(tagName)
   if (classes) {

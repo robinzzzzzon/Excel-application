@@ -28,18 +28,28 @@ export class DomListener {
       if(!this[methodName]) {
         throw new Error (`Method ${methodName} is not implemented in ${this.name}`)
       }
+
+      //для того, чтобы methodName передавался вместе с контекстом, 
+      //мы можем переопределить methodName, насильно привязав ему контекст
+      this[methodName] = this[methodName].bind(this)
+
       //здесь, мы обращаемся к root каждого инстанса 
       //и т.к. инстанс любой компоненты является имплементацией $класса Dom, то ему доступен метод-обертка on(),
       //в который уже мы передаем наш тип слушателя и сформированный methodName, 
-      //который насильно привязываем при помощи bind() для избежания потери контекста.
-      //запись this[methodName].bind(this) по сути это как пример: formula.onSubmit()
-      this.$root.on(listener, this[methodName].bind(this))
+      //запись this[methodName] по сути это как пример: formula.onSubmit()
+      this.$root.on(listener, this[methodName])
     })
   }
 
   //базовая реализация удаления слушателей
   removeDOMListeners() {
-    //нужно реализовать
+
+    this.listeners.forEach(listener => {
+
+      const methodName = getMethodName(listener)
+
+      this.$root.off(listener, this[methodName])
+    })
   }
 }
 
