@@ -23,6 +23,7 @@ export class ExcelComponent extends DomListener {
     this.initDOMListeners()
   }
 
+  //метод удаления слушателей
   destroy() {
     this.removeDOMListeners()
   }

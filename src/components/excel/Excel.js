@@ -44,8 +44,8 @@ export class Excel {
     //проходим по уже переопределенному this.components и вызываем у каждого инстанса метод init()
     this.components.forEach(component => component.init())
 
-    setTimeout(() => {
-      this.components.forEach(component => component.destroy())
-       }, 10000)
-  }
-}
+//     setTimeout(() => {
+//       this.components.forEach(component => component.destroy())
+//        }, 20000)
+   }
+ }

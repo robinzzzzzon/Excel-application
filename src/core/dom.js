@@ -56,6 +56,34 @@ class Dom {
     //возвращаем контекст для чейна
     return this
   }
+
+  //метод получения ближайшего родителя по заданному селектору
+  closest(selector) {
+    return $(this.$el.closest(selector))
+  }
+
+  //метод получения координат элемента
+  getCordinate() {
+    return this.$el.getBoundingClientRect()
+  }
+
+  //обертка метода получения группы элементов по селектору
+  getElementsBySelector(selector) {
+    return this.$el.querySelectorAll(`${selector}`)
+  }
+
+  //абстрактная утилита для задания значений css-стилей dom-элементам
+  setCss(styles = {}) {
+    Object.keys(styles)
+      .forEach(key => {
+        this.$el.style[key] = styles[key]
+      })
+  }
+
+  //геттер для получения data атрибутов
+  get data() {
+    return this.$el.dataset
+  }
 }
 
 //функция создания инстанса класса.
