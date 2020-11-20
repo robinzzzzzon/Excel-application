@@ -1,12 +1,11 @@
 //класс-утилита для создания вспомогательных методов для работы с дом-элементами
 class Dom {
   //т.к. инстанс класса Dom должен быть всегда с заданным селектором, то мы описываем соотв. конструктор:
-  constructor (selector) {
+  constructor(selector) {
     //делаем проверку через тернарник, что если подаваемый селектор - строка (например #app), то тогда ищем ноду с таким селектором.
     //если же это целая нода ,то присваиваем ее в контекст this.$el
-    this.$el = typeof selector === 'string' 
-    ? document.querySelector(selector)
-    : selector
+    this.$el =
+      typeof selector === 'string' ? document.querySelector(selector) : selector
   }
 
   //объединенный по сути get/set метод по работе с html ноды.
@@ -37,7 +36,6 @@ class Dom {
   off(evenType, callbackFn) {
     this.$el.removeEventListener(evenType, callbackFn)
   }
-
 
   //метод добавления элементов.
   //проверяем, если при вызове, наша нода является инстансом класса Dom, то присваиваем node.$el т.к. это dom-элемент
@@ -74,10 +72,9 @@ class Dom {
 
   //абстрактная утилита для задания значений css-стилей dom-элементам
   setCss(styles = {}) {
-    Object.keys(styles)
-      .forEach(key => {
-        this.$el.style[key] = styles[key]
-      })
+    Object.keys(styles).forEach((key) => {
+      this.$el.style[key] = styles[key]
+    })
   }
 
   //геттер для получения data атрибутов
@@ -93,7 +90,7 @@ export function $(selector) {
   return new Dom(selector)
 }
 
-//переменная с анонимной функцией. 
+//переменная с анонимной функцией.
 //Здесь мы создаем элемент по тагнейму, если указаны классы, то добавляем их и возвращаем элемент
 $.create = (tagName, classes = '') => {
   const el = document.createElement(tagName)

@@ -1,7 +1,6 @@
-import {ExcelComponent} from '@core/ExcelComponent'
+import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Formula extends ExcelComponent {
-
   //т.к. у нас добавление слушателей реализовано в абстрактном родительском классе DomListener,
   //то необходимо прокидывать наверх помимо рута еще и список слушателей.
   //Для этого реализуем конструктор:
@@ -9,7 +8,7 @@ export class Formula extends ExcelComponent {
     //типичный проброс параметров в родит. конструктор
     super($root, {
       name: 'Formula',
-      listeners: ['input', 'click']
+      listeners: ['input', 'click'],
     })
   }
 

@@ -1,4 +1,4 @@
-import {$} from '@core/dom'
+import { $ } from '@core/dom'
 
 //класс реализации ExcelComponent.
 export class Excel {
@@ -15,8 +15,7 @@ export class Excel {
     const $root = $.create('div', 'excel')
 
     //проходим методом map по каждому классу Component и возвращаем его инстанс в переопределенный this.components
-    this.components = this.components.map(Component => {
-      
+    this.components = this.components.map((Component) => {
       //создаем div с указанием класснейма для каждой компоненты(на этоп этапе это класс а не его инстанс)
       const $el = $.create('div', Component.className)
       //теперь уже создаем инстанс класса и подаем на вход наш div с класснеймом
@@ -24,7 +23,7 @@ export class Excel {
 
       //подаем на вход нашей ноде чере dom-метод html() возвращаемый html инстанса каждого из классов компоненты
       $el.html(component.toHTML())
-      
+
       //помещаем в $root наши элементы
       $root.append($el)
 
@@ -42,10 +41,10 @@ export class Excel {
     this.$el.append(this.getRoot())
 
     //проходим по уже переопределенному this.components и вызываем у каждого инстанса метод init()
-    this.components.forEach(component => component.init())
+    this.components.forEach((component) => component.init())
 
-//     setTimeout(() => {
-//       this.components.forEach(component => component.destroy())
-//        }, 20000)
-   }
- }
+    //     setTimeout(() => {
+    //       this.components.forEach(component => component.destroy())
+    //        }, 20000)
+  }
+}
