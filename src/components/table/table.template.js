@@ -4,9 +4,18 @@ const CODES = {
   Z: 90,
 }
 
-//функция создания ячеек
-function toCell(content, index) {
-  return `<div class="cell" contenteditable data-col="${index}">${content}</div>`
+// //функция создания ячеек(без замыкания)
+// function toCell(rowNumber, colNumber) {
+//   return `<div class="cell" contenteditable data-col="${colNumber}" data-row="${rowNumber}"></div>`
+// }
+
+//функция создания ячеек(с замыканием)
+function toCell(rowNumber) {
+  return function (_, colNumber) {
+    return `<div class="cell" contenteditable 
+    data-col="${colNumber}" 
+    data-id="${rowNumber}:${colNumber}"></div>`
+  }
 }
 
 //функция создания колонки, которая принимает некий элемент, в нашем случае char
@@ -55,19 +64,20 @@ export function createTable(rowsCount = 10) {
     .map((el, index) => toColumn(el, index)) //теперь еще раз переопределяем, но теперь заполняем каждый элемент div - элементом с содержимым A-Z
     .join('') //теперь превращяем наш массив в строку, чтобы получить из массива строку
 
-  //создаем массив ячеек по аналогии с колонками, только не заполняем ячейки значениями
-  const cells = new Array(colsCount)
-    .fill('')
-    .map((el, index) => toCell(el, index))
-    .join('')
-
   //наконец создаем нашу первую строчку с названием столбцов, подав на вход наш развернутый из массива html
   rows.push(createRow(null, cols))
 
   //теперь необходимо самостоятельно реализовать создание строк с обычными пустыми ячейками
-  for (let i = 0; i < rowsCount; i++) {
+  for (let rowNumber = 0; rowNumber < rowsCount; rowNumber++) {
+    //создаем массив ячеек по аналогии с колонками, только не заполняем ячейки значениями
+    const cells = new Array(colsCount)
+      .fill('')
+      // .map((_, colIndex) => toCell(rowNumber, colIndex)) //реализация для метода toCell без замыкания
+      .map(toCell(rowNumber)) //реализация вызова метода с замыканием
+      .join('')
+
     //т.к. нужен отсчет с 1, передаем i + 1
-    rows.push(createRow(i + 1, cells))
+    rows.push(createRow(rowNumber + 1, cells))
   }
 
   //соотв-нно строки тоже нужно развернуть из массива в html

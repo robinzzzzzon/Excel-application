@@ -8,11 +8,11 @@ export function resizeHandler($root, event) {
   //Получаем с помощью метода get data у объекта Dom, данные элемента
   const resizerType = $resizer.data.resize
 
-  //Здесь задаем тернарник по значению и далее уже его передаем в setCss:
+  //Здесь задаем тернарник по значению и далее уже его передаем в setCssStyle:
   const sideProp = resizerType === 'col' ? 'bottom' : 'right'
 
   //метод-обертка dom.js. Задаем стили при начале движения ползунка
-  $resizer.setCss({
+  $resizer.setCssStyle({
     opacity: 1,
     [sideProp]: '-5000px',
   })
@@ -36,14 +36,14 @@ export function resizeHandler($root, event) {
       //вычисляем текущее значение ширины элемента с учетом сдвига в любую из сторон
       value = parentCoords.width + delta
       //присваиваем css-стилю ресайзера полученное значение
-      $resizer.setCss({ right: -delta + 'px' })
+      $resizer.setCssStyle({ right: -delta + 'px' })
     } else if (resizerType === 'row') {
       //вычисляем дэльту по оси Y:
       const delta = ev.pageY - parentCoords.bottom
       //вычисляем текущее значение высоты элемента с учетом сдвига в любую из сторон
       value = parentCoords.height + delta
       //присваиваем css-стилю ресайзера полученное значение
-      $resizer.setCss({ bottom: -delta + 'px' })
+      $resizer.setCssStyle({ bottom: -delta + 'px' })
     }
   }
   //здесь говорим, что если выполняется onmouseup, то нужно зануллить onmousemove и onmouseup
@@ -54,20 +54,18 @@ export function resizeHandler($root, event) {
     //наконец когда занулили слушатели, задаем окончательные css-показатели нашим элементам:
     if (resizerType === 'col') {
       //задаем ширину для колонки
-      $parent.setCss({ width: value + 'px' })
+      $parent.setCssStyle({ width: value + 'px' })
       //находим все элементы на странице с таким же data-col как у колонки и присваиваем им те же показатели ширины
-      $root
-        .getElementsBySelector(`[data-col="${$parent.data.col}"]`)
-        .forEach((el) => {
-          el.style.width = value + 'px'
-        })
+      $root.findAll(`[data-col="${$parent.data.col}"]`).forEach((el) => {
+        el.style.width = value + 'px'
+      })
     } else {
       //ну и если это строки, то просто задаем новое значение высоте строки
-      $parent.setCss({ height: value + 'px' })
+      $parent.setCssStyle({ height: value + 'px' })
     }
 
     //для ресайзера возвращаем исходное положение относительно родителя
-    $resizer.setCss({
+    $resizer.setCssStyle({
       opacity: 0,
       bottom: 0,
       right: 0,

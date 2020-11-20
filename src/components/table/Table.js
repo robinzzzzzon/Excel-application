@@ -2,6 +2,7 @@ import { ExcelComponent } from '@core/ExcelComponent'
 import { createTable } from './table.template'
 import { resizeHandler } from './table.resize'
 import { shouldResize } from './table.utils'
+import { TableSelection } from './TableSelection'
 
 export class Table extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
@@ -16,6 +17,20 @@ export class Table extends ExcelComponent {
   //Переопределяем метод
   toHTML() {
     return createTable()
+  }
+
+  //переопределяем родительский методов и добавляем реализацию
+  prepare() {
+    this.selection = new TableSelection()
+  }
+
+  //переопределяем родительский метод init()
+  init() {
+    super.init()
+
+    //т.к. table-компонент это так же объект класса dom, то обращаемся к его методам, с реализацией выбора 1й ячейки как активной
+    const $cell = this.$root.find('[data-id="0:0"]')
+    this.selection.selectAny($cell)
   }
 
   //общий метод ресайза таблицы

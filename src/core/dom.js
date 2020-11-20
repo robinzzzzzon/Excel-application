@@ -66,15 +66,27 @@ class Dom {
   }
 
   //обертка метода получения группы элементов по селектору
-  getElementsBySelector(selector) {
+  findAll(selector) {
     return this.$el.querySelectorAll(`${selector}`)
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector))
+  }
+
   //абстрактная утилита для задания значений css-стилей dom-элементам
-  setCss(styles = {}) {
+  setCssStyle(styles = {}) {
     Object.keys(styles).forEach((key) => {
       this.$el.style[key] = styles[key]
     })
+  }
+
+  addCssClass(className) {
+    this.$el.classList.add(className)
+  }
+
+  removeCssClass(className) {
+    this.$el.classList.remove(className)
   }
 
   //геттер для получения data атрибутов
