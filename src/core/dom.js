@@ -74,6 +74,11 @@ class Dom {
     return $(this.$el.querySelector(selector))
   }
 
+  focus() {
+    this.$el.focus()
+    return this
+  }
+
   //абстрактная утилита для задания значений css-стилей dom-элементам
   setCssStyle(styles = {}) {
     Object.keys(styles).forEach((key) => {
@@ -92,6 +97,20 @@ class Dom {
   //геттер для получения data атрибутов
   get data() {
     return this.$el.dataset
+  }
+
+  //метод получения числового представления id элементов
+  //здесь мы делаем рекурсию и т.к. при входе в if, мы вызываем метод getId() без параметра, то она нам вернет числовое id ячейки, которое мы уже засплитим в массив строк
+  //и далее мы уже возвращаем объект с числовым представлением id
+  getId(parse) {
+    if (parse) {
+      const parseId = this.getId().split(':')
+      return {
+        row: +parseId[0],
+        col: +parseId[1]
+      }
+    }
+    return this.data.id
   }
 }
 

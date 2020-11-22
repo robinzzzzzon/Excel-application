@@ -13,7 +13,8 @@ const CODES = {
 function toCell(rowNumber) {
   return function (_, colNumber) {
     return `<div class="cell" contenteditable 
-    data-col="${colNumber}" 
+    data-col="${colNumber}"
+    data-type="cell"
     data-id="${rowNumber}:${colNumber}"></div>`
   }
 }
