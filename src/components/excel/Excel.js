@@ -1,4 +1,5 @@
-import {$} from '@core/dom'
+import { $ } from '@core/dom'
+import { Emitter } from '@core/Emitter'
 
 //класс реализации ExcelComponent.
 export class Excel {
@@ -7,6 +8,7 @@ export class Excel {
     //создаем элемент через $() делая элементом класса Dom
     this.$el = $(selector)
     this.components = options.components || []
+    this.emitter = new Emitter()
   }
 
   //Метод создания структуры компонентов
@@ -14,17 +16,20 @@ export class Excel {
     //Создаем div с классом excel и возвращаем его
     const $root = $.create('div', 'excel')
 
+    const componentOptions = {
+      emitter: this.emitter
+    }
+
     //проходим методом map по каждому классу Component и возвращаем его инстанс в переопределенный this.components
-    this.components = this.components.map(Component => {
-      
+    this.components = this.components.map((Component) => {
       //создаем div с указанием класснейма для каждой компоненты(на этоп этапе это класс а не его инстанс)
       const $el = $.create('div', Component.className)
       //теперь уже создаем инстанс класса и подаем на вход наш div с класснеймом
-      const component = new Component($el) // <- вот здесь мы передаем на вход элемент для класса DOMListener. Это нужно для того, чтобы централизованно навешивать слушатели
+      const component = new Component($el, componentOptions) // <- вот здесь мы передаем на вход элемент для класса DOMListener. Это нужно для того, чтобы централизованно навешивать слушатели
 
       //подаем на вход нашей ноде чере dom-метод html() возвращаемый html инстанса каждого из классов компоненты
       $el.html(component.toHTML())
-      
+
       //помещаем в $root наши элементы
       $root.append($el)
 
@@ -42,10 +47,14 @@ export class Excel {
     this.$el.append(this.getRoot())
 
     //проходим по уже переопределенному this.components и вызываем у каждого инстанса метод init()
-    this.components.forEach(component => component.init())
+    this.components.forEach((component) => component.init())
 
-//     setTimeout(() => {
-//       this.components.forEach(component => component.destroy())
-//        }, 20000)
-   }
- }
+    //     setTimeout(() => {
+    //       this.components.forEach(component => component.destroy())
+    //        }, 20000)
+  }
+
+  destroy() {
+    this.components.forEach((component) => component.destroy())
+  }
+}

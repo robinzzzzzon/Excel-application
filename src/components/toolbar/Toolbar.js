@@ -1,13 +1,14 @@
-import {ExcelComponent} from '@core/ExcelComponent'
+import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Toolbar extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
   static className = 'excel__toolbar'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
       name: 'Toolbar',
-      listeners: ['click']
+      listeners: ['click'],
+      ...options
     })
   }
 
