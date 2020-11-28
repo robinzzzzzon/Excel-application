@@ -1,9 +1,15 @@
-import {ExcelComponent} from '@core/ExcelComponent'
+import { ExcelComponent } from '@core/ExcelComponent'
 
 export class Header extends ExcelComponent {
-  
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
   static className = 'excel__header'
+
+  constructor($root, options) {
+    super($root, {
+      name: 'Header',
+      ...options
+    })
+  }
 
   //Переопределяем метод
   toHTML() {

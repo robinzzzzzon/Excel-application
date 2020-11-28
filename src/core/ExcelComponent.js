@@ -8,6 +8,8 @@ export class ExcelComponent extends DomListener {
   constructor($root, options = {}) {
     super($root, options.listeners)
     this.name = options.name || ''
+    this.emitter = options.emitter
+    this.unsubscribers = []
 
     //здесь, мы вызываем метод а реализацию уже опишем в дочерних классах
     this.prepare()
@@ -21,6 +23,17 @@ export class ExcelComponent extends DomListener {
   //метод-шаблон для дочерних классов ,чтобы можно было лучше декомпозировать логику
   prepare() {}
 
+  //уведомляем слушателей про события event
+  $emit(event, ...args) {
+    this.emitter.emit(event, ...args)
+  }
+
+  //подписываемся на события
+  $on(event, fn) {
+    const subscr = this.emitter.subscribe(event, fn)
+    this.unsubscribers.push(subscr)
+  }
+
   //для разделения зон ответственности по логике,
   //мы добавляем обертку и будем использовать ее для инита слушателей
   init() {
@@ -28,8 +41,9 @@ export class ExcelComponent extends DomListener {
     this.initDOMListeners()
   }
 
-  //метод удаления слушателей
+  //метод удаления слушателей и удаления подписок
   destroy() {
     this.removeDOMListeners()
+    this.unsubscribers.forEach((subscr) => subscr())
   }
 }

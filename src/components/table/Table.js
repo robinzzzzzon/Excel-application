@@ -9,9 +9,11 @@ export class Table extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
   static className = 'excel__table'
 
-  constructor($root) {
+  constructor($root, options) {
     super($root, {
-      listeners: ['mousedown', 'keydown']
+      name: 'Table',
+      listeners: ['mousedown', 'keydown', 'input'],
+      ...options
     })
   }
 
@@ -29,9 +31,27 @@ export class Table extends ExcelComponent {
   init() {
     super.init()
 
-    //т.к. table-компонент это так же объект класса dom, то обращаемся к его методам, с реализацией выбора 1й ячейки как активной
+    //т.к. table-компонент это так же объект класса dom,
+    //то обращаемся к его методам, с реализацией выбора 1й ячейки как активной
     const $cell = this.$root.find('[data-id="0:0"]')
+    //селектим 1ю ячейку + уведомляем о событии
+    this.selectCell($cell)
+
+    //подписываемся на событие ввода для формулы и сэтим это значение в текущую ячейку
+    this.$on('formula:input', (text) => {
+      this.selection.current.text(text)
+    })
+
+    //подписываемся на событие окончания ввода по Enter/Tab и смещаем фокус на текущую ячейку
+    this.$on('formula:done', () => {
+      this.selection.current.focus()
+    })
+  }
+
+  //метод селекта ячейки + уведомление о событии
+  selectCell($cell) {
     this.selection.selectAny($cell)
+    this.$emit('table:select', $cell)
   }
 
   //общий метод ресайза таблицы
@@ -89,8 +109,14 @@ export class Table extends ExcelComponent {
       const id = this.selection.current.getId(true)
       //вычисляем id по nextSelector() и находим этот элемент
       const $next = this.$root.find(nextSelector(key, id))
-      //перемещаем фокус на найденный элемент + делаем его выделенным
-      this.selection.selectAny($next)
+      //перемещаем фокус на найденный элемент + делаем его выделенным а так же уведомляем  о событии
+      this.selectCell($next)
     }
+  }
+
+  //метод ввода в рамках таблицы.
+  //Здесь при инициализации создаем уведомление на это событие для других слушателей(например для инстнса Formula)
+  onInput(event) {
+    this.$emit('table:input', $(event.target))
   }
 }
