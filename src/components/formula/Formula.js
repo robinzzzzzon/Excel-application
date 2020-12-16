@@ -2,6 +2,9 @@ import { ExcelComponent } from '@core/ExcelComponent'
 import { $ } from '@core/dom.js'
 
 export class Formula extends ExcelComponent {
+  //Сразу присваиваем класс по умолчанию в виде статической переменной:
+  static className = 'excel__formula'
+
   //т.к. у нас добавление слушателей реализовано в абстрактном родительском классе DomListener,
   //то необходимо прокидывать наверх помимо рута еще и список слушателей.
   //Для этого реализуем конструктор:
@@ -10,12 +13,10 @@ export class Formula extends ExcelComponent {
     super($root, {
       name: 'Formula',
       listeners: ['input', 'keydown'],
+      subscribe: ['currentText'],
       ...options
     })
   }
-
-  //Сразу присваиваем класс по умолчанию в виде статической переменной:
-  static className = 'excel__formula'
 
   //Переопределяем метод
   toHTML() {
@@ -31,20 +32,20 @@ export class Formula extends ExcelComponent {
 
     this.$formula = this.$root.find('#formula')
 
-    //подписываемся на событие селекта ячейки в таблице и получаем ее текст
+    //подписываемся на событие селекта ячейки в таблице и получаем ее значение
     this.$on('table:select', ($cell) => {
-      this.$formula.text($cell.text())
+      this.$formula.text($cell.data.value)
     })
+  }
 
-    //подписываемся на событие ввода в ячейке и получаем текст
-    this.$on('table:input', ($cell) => {
-      this.$formula.text($cell.text())
-    })
+  storeChanged({ currentText }) {
+    this.$formula.text(currentText)
   }
 
   //добавление input слушателя
   onInput(event) {
-    this.$emit('formula:input', $(event.target).text())
+    const text = $(event.target).text()
+    this.$emit('formula:input', text)
   }
 
   //метод в которой если срабатывает event.key = Tab/Enter,
@@ -57,9 +58,4 @@ export class Formula extends ExcelComponent {
       this.$emit('formula:done')
     }
   }
-
-  //   //добавление click слушателя
-  //   onClick(event) {
-  //     console.log('Formula: onClick', event)
-  //   }
 }

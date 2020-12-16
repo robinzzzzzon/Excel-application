@@ -10,10 +10,10 @@ export function isCell(event) {
 }
 
 //функция матчинга 2х массивов idшников строк и колонок
-export function toMatrix(current, target) {
+export function toMatrix($current, $target) {
   //получаем размеры(для нас это расстояние) массивов исходя из входных col и row-значений 2х ячеек
-  const selectedCollsArray = range(current.col, target.col)
-  const selectRowsArray = range(current.row, target.row)
+  const selectedCollsArray = range($current.col, $target.col)
+  const selectRowsArray = range($current.row, $target.row)
 
   //на выход подаем сматченный массив соотношения row:col между current и target ячейками
   return selectedCollsArray.reduce((acc, col) => {
