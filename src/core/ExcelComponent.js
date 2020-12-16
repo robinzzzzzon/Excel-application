@@ -9,6 +9,8 @@ export class ExcelComponent extends DomListener {
     super($root, options.listeners)
     this.name = options.name || ''
     this.emitter = options.emitter
+    this.subscribe = options.subscribe || []
+    this.store = options.store
     this.unsubscribers = []
 
     //здесь, мы вызываем метод а реализацию уже опишем в дочерних классах
@@ -32,6 +34,18 @@ export class ExcelComponent extends DomListener {
   $on(event, fn) {
     const subscr = this.emitter.subscribe(event, fn)
     this.unsubscribers.push(subscr)
+  }
+
+  //метод уведомления для redux
+  $dispatch(action) {
+    this.store.dispatch(action)
+  }
+
+  //сюда приходят только изменения по тем полям, на которые мы подписались
+  storeChanged() {}
+
+  isWatching(key) {
+    return this.subscribe.includes(key)
   }
 
   //для разделения зон ответственности по логике,

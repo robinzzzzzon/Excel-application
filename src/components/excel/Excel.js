@@ -1,5 +1,6 @@
 import { $ } from '@core/dom'
 import { Emitter } from '@core/Emitter'
+import { StoreSubscriber } from '../../core/StoreSubscriber'
 
 //класс реализации ExcelComponent.
 export class Excel {
@@ -8,7 +9,9 @@ export class Excel {
     //создаем элемент через $() делая элементом класса Dom
     this.$el = $(selector)
     this.components = options.components || []
+    this.store = options.store
     this.emitter = new Emitter()
+    this.subscriber = new StoreSubscriber(this.store)
   }
 
   //Метод создания структуры компонентов
@@ -16,8 +19,10 @@ export class Excel {
     //Создаем div с классом excel и возвращаем его
     const $root = $.create('div', 'excel')
 
+    //при создании инстанса каждой компоненты на вход подаем инстанс эмиттера и стора
     const componentOptions = {
-      emitter: this.emitter
+      emitter: this.emitter,
+      store: this.store
     }
 
     //проходим методом map по каждому классу Component и возвращаем его инстанс в переопределенный this.components
@@ -46,15 +51,14 @@ export class Excel {
     //this.$el инстанса Excel-класса помещает в себя возвращаемый рут из this.getRoot()
     this.$el.append(this.getRoot())
 
+    this.subscriber.subscribeComponents(this.components)
+
     //проходим по уже переопределенному this.components и вызываем у каждого инстанса метод init()
     this.components.forEach((component) => component.init())
-
-    //     setTimeout(() => {
-    //       this.components.forEach(component => component.destroy())
-    //        }, 20000)
   }
 
   destroy() {
+    this.subscriber.unsubscribeComponents()
     this.components.forEach((component) => component.destroy())
   }
 }

@@ -23,7 +23,7 @@ class Dom {
 
   //get/set для работы с текстом dom-элемента
   text(text) {
-    if (typeof text === 'string') {
+    if (typeof text !== 'undefined') {
       this.$el.textContent = text
       return this
     }
@@ -92,10 +92,17 @@ class Dom {
   }
 
   //абстрактная утилита для задания значений css-стилей dom-элементам
-  setCssStyle(styles = {}) {
+  setCssStyles(styles = {}) {
     Object.keys(styles).forEach((key) => {
       this.$el.style[key] = styles[key]
     })
+  }
+
+  getCssStyles(styles = []) {
+    return styles.reduce((res, style) => {
+      res[style] = this.$el.style[style]
+      return res
+    }, {})
   }
 
   addCssClass(className) {
@@ -125,6 +132,15 @@ class Dom {
       }
     }
     return this.data.id
+  }
+
+  getAttr(name, value) {
+    if (value) {
+      this.$el.setAttribute(name, value)
+      return this
+    }
+
+    return this.$el.getAttribute(name, value)
   }
 }
 

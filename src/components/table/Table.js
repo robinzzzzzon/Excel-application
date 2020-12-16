@@ -1,9 +1,12 @@
 import { ExcelComponent } from '@core/ExcelComponent'
 import { createTable } from './table.template'
 import { resizeHandler } from './table.resize'
-import { isCell, shouldResize, toMatrix, nextSelector } from './table.utils'
+import { isCell, shouldResize, toMatrix, nextSelector } from './table.functions'
 import { TableSelection } from './TableSelection'
+import * as actions from '../../redux/actions'
 import { $ } from '@core/dom'
+import { defaultStyles } from '../../core/costants'
+import { parse } from '../../core/parse'
 
 export class Table extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:
@@ -19,7 +22,8 @@ export class Table extends ExcelComponent {
 
   //Переопределяем метод
   toHTML() {
-    return createTable()
+    //создаем таблицу и при создании получаем состояние
+    return createTable(20, this.store.getState())
   }
 
   //переопределяем родительский методов и добавляем реализацию
@@ -38,13 +42,24 @@ export class Table extends ExcelComponent {
     this.selectCell($cell)
 
     //подписываемся на событие ввода для формулы и сэтим это значение в текущую ячейку
-    this.$on('formula:input', (text) => {
-      this.selection.current.text(text)
+    this.$on('formula:input', (value) => {
+      this.selection.current.getAttr('data-value', value).text(parse(value))
+      this.updateTextInStore(value)
     })
 
     //подписываемся на событие окончания ввода по Enter/Tab и смещаем фокус на текущую ячейку
     this.$on('formula:done', () => {
       this.selection.current.focus()
+    })
+
+    this.$on('toolbar:applyStyle', (value) => {
+      this.selection.applyStyle(value)
+      this.$dispatch(
+        actions.applyStyle({
+          value,
+          ids: this.selection.selectedIds
+        })
+      )
     })
   }
 
@@ -52,6 +67,20 @@ export class Table extends ExcelComponent {
   selectCell($cell) {
     this.selection.selectAny($cell)
     this.$emit('table:select', $cell)
+    const styles = $cell.getCssStyles(Object.keys(defaultStyles))
+    this.$dispatch(actions.changeStyles(styles))
+  }
+
+  //метод-обертка ресайза
+  async resizeTable(event) {
+    try {
+      //кладем результат промиса в data
+      const data = await resizeHandler(this.$root, event)
+      //уведомляем, о ресайзе table
+      this.$dispatch(actions.tableResize(data))
+    } catch (e) {
+      console.warn('Resize error', e.message)
+    }
   }
 
   //общий метод ресайза таблицы
@@ -60,8 +89,7 @@ export class Table extends ExcelComponent {
 
     //2)А можно получать доступ до переменных data у DOM-элементов с помощью функции dataset. В нашем случае это data-resize
     if (shouldResize(event)) {
-      resizeHandler(this.$root, event)
-
+      this.resizeTable(event)
       //ниже реализация выделения 1й или группы активных ячеек
     } else if (isCell(event)) {
       //оборачиваем для удобства выбранную ячейку
@@ -82,7 +110,7 @@ export class Table extends ExcelComponent {
         this.selection.selectGroup($selectedCells)
       } else {
         //добавляем cssClass 1й выбранной ячейке
-        this.selection.selectAny($target)
+        this.selectCell($target)
       }
     }
   }
@@ -114,9 +142,19 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateTextInStore(value) {
+    this.$dispatch(
+      actions.changeText({
+        id: this.selection.current.getId(),
+        value
+      })
+    )
+  }
+
   //метод ввода в рамках таблицы.
   //Здесь при инициализации создаем уведомление на это событие для других слушателей(например для инстнса Formula)
   onInput(event) {
-    this.$emit('table:input', $(event.target))
+    //this.$emit('table:input', $(event.target))
+    this.updateTextInStore($(event.target).text())
   }
 }

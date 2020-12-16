@@ -7,6 +7,10 @@ export class TableSelection {
     this.current = null
   }
 
+  get selectedIds() {
+    return this.group.map(($el) => $el.getId())
+  }
+
   //любая ячейка это всегда дом-элемент
   //Поэтому можем использовать dom-методы
   selectAny($el) {
@@ -29,5 +33,12 @@ export class TableSelection {
     this.clear()
     this.group = $group
     this.group.forEach(($el) => $el.addCssClass(TableSelection.className))
+  }
+
+  //метод применения css-стилей для группы ячеек
+  applyStyle(style) {
+    this.group.forEach(($el) => {
+      $el.setCssStyles(style)
+    })
   }
 }
