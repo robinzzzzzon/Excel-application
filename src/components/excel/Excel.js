@@ -1,13 +1,13 @@
 import { $ } from '@core/dom'
 import { Emitter } from '@core/Emitter'
 import { StoreSubscriber } from '../../core/StoreSubscriber'
+import { updateDate } from '../../redux/actions'
 
 //класс реализации ExcelComponent.
 export class Excel {
   //Задаем конструктор где говорим, создать элемент с указанным селектором и массивом компонентов.
-  constructor(selector, options) {
+  constructor(options) {
     //создаем элемент через $() делая элементом класса Dom
-    this.$el = $(selector)
     this.components = options.components || []
     this.store = options.store
     this.emitter = new Emitter()
@@ -47,10 +47,8 @@ export class Excel {
   }
 
   //Метод рендеринга
-  render() {
-    //this.$el инстанса Excel-класса помещает в себя возвращаемый рут из this.getRoot()
-    this.$el.append(this.getRoot())
-
+  init() {
+    this.store.dispatch(updateDate())
     this.subscriber.subscribeComponents(this.components)
 
     //проходим по уже переопределенному this.components и вызываем у каждого инстанса метод init()
