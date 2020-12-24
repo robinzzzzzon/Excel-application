@@ -1,4 +1,4 @@
-import { storage } from '../utils'
+import { storage } from '../core/utils'
 
 function toHtml(key) {
   const model = storage(key)

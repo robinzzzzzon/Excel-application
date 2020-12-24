@@ -1,5 +1,5 @@
-import { $ } from '../dom'
-import { Page } from '../Page'
+import { $ } from '../core/dom'
+import { Page } from '../core/Page'
 import { createDashboardPanel } from './dashboard.functions'
 
 export class DashBoardPage extends Page {

@@ -1,7 +1,7 @@
 import './scss/index.scss'
-import { Router } from './core/routes/Router'
-import { DashBoardPage } from './core/pages/DashBoardPage'
-import { ExcelPage } from './core/pages/ExcelPage'
+import { Router } from './routes/Router'
+import { DashBoardPage } from './pages/DashBoardPage'
+import { ExcelPage } from './pages/ExcelPage'
 
 //Создаем страницы теперь через инстанс класса Router
 new Router('#app', {

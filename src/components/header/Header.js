@@ -3,7 +3,7 @@ import { defaultTitle } from '../../core/costants'
 import { changeTitle } from '../../redux/actions'
 import { $ } from '@core/dom.js'
 import { debounce } from '../../core/utils'
-import { ActiveRoute } from '../../core/routes/ActiveRoute'
+import { ActiveRoute } from '../../routes/ActiveRoute'
 
 export class Header extends ExcelComponent {
   //Сразу присваиваем класс по умолчанию в виде статической переменной:

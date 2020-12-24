@@ -4,10 +4,10 @@ import { Toolbar } from '@/components/toolbar/Toolbar'
 import { Formula } from '@/components/formula/Formula'
 import { Table } from '@/components/table/Table'
 import { createStore } from '@core/createStore'
-import { rootReducer } from '../../redux/rootReducer'
-import { normalizeInitialState } from '../../redux/initialState'
+import { rootReducer } from '../redux/rootReducer'
+import { normalizeInitialState } from '../redux/initialState'
 import { debounce, storage } from '@core/utils'
-import { Page } from '../Page'
+import { Page } from '../core/Page'
 
 function storageName(param) {
   return 'excel:' + param
